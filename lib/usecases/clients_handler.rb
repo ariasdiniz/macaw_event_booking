@@ -17,7 +17,7 @@ class ClientsHandler
 
   def self.login(body, session)
     pswd = body['password']
-    user = Clients.find_by[username: body['username']]
+    user = Clients.find_by(username: body['username'])
     raise 'User not found' if user.nil?
     raise 'Incorrect Password!' unless Digest::SHA2.hexdigest(pswd) == user.password
 

@@ -2,11 +2,6 @@
   "macaw": {
     "port": 3000,
     "bind": "0.0.0.0",
-    "log": {
-      "sensitive_fields": [
-        "password"
-      ]
-    },
     "rate_limiting": {
       "window": 60,
       "max_requests": 60

@@ -3,7 +3,7 @@
 require_relative '../usecases/bookings_handler'
 require 'json'
 
-class BookingRoutes
+class BookingsRoutes
 
   def self.set_booking_routes(macaw)
     book_event(macaw)
@@ -13,6 +13,7 @@ class BookingRoutes
   def self.book_event(macaw)
     macaw.post('/bookings') do |context|
       name = JSON.parse(context[:body])
+      raise 'You must log in to book a concert' if context[:client].nil? || context[:client][:login].nil?
       raise 'The "name" of the event cannot be null.' if name.nil?
 
       BookingsHandler.book_ticket(context[:client], name['name'])
@@ -23,8 +24,8 @@ class BookingRoutes
   end
 
   def self.get_all_bookings(macaw)
-    macaw.get('/booking') do |_context|
-      return JSON.pretty_generate(JSON.pretty_generate(BookingsHandler.get_all_bookings)), 200, { 'Content-Type': 'application.json' }
+    macaw.get('/bookings') do |_context|
+      return JSON.pretty_generate(BookingsHandler.get_all_bookings), 200, { 'Content-Type': 'application.json' }
     rescue StandardError => e
       return JSON.pretty_generate({ message: e.message }), 400, { 'Content-Type': 'application.json' }
     end
